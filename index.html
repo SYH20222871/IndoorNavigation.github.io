@@ -1,18 +1,25 @@
-<DOCTYPE html>
-  <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-      </head>
-      <body>
-        <h1>Indoor Navigation System</h1>
-      </body>
-  </html>
-    function runPythonScript() {
-  // Get the path to the Python script.
-  var pythonScriptPath = "path/to/python/uwb.py";
-  // Run the Python script.
-  subprocess.run(["python", pythonScriptPath]);
-}
-    runPythonScript()">Run Python Script</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UWB Data</title>
+</head>
+<body>
+  <ul id="uwbData"></ul>
+  <script>
+    const ws = new WebSocket('ws://localhost:8080');
+    ws.onmessage = (event) => {
+      const uwbList = JSON.parse(event.data);
+      const uwbDataElement = document.getElementById('uwbData');
+      uwbDataElement.innerHTML = '';
+      uwbList.forEach((uwbAnchor) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `Distance for Anchor ${uwbAnchor.A}: ${uwbAnchor.R}`;
+        uwbDataElement.appendChild(listItem);
+      });
+    };
+  </script>
+</body>
+</html>
